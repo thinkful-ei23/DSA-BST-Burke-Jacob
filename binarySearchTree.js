@@ -205,65 +205,97 @@ function isItBST (BST) {
 //          / \
 //        3    9
 //            / \
-//          6    11
+//          6    12
+//                              
 
 // output: 6
+// need to find the max of right most branch
+// if we find the max
+// the right most branch on the left of that is the second largest
+let counter = 3;
+let key = null;
+// 3
+// 1   4
 
+function thirdLargestNodeRecursion(bst) {
 
+  if (bst.right) {
+    thirdLargestNodeRecursion(bst.right);
+    if (key) {
+      return key;
+    }
+  }
+  counter--;
 
-function thirdLargestNode(bst) {
-    if (bst.key === null) {
-        throw new Error('bst is empty');
-    } 
-    if (!bst.left && !bst.right) {
-        throw new Error('bst is a leaf');
-    }
-    if (bst.left && !bst.right || !bst.left && bst.right) {
-        if (!bst.left.left && !bst.left.right || !bst.right.left && !bst.right.right) {
-            throw new Error('bst only contains 2 nodes');
-        }
-    }
-    let currentNode = bst;
-    while(currentNode.right) {
-        // at end of while loop let currentNode = currentNode.right
-        currentNode = currentNode.right;
-    }
-    let largestNode = currentNode;
-    if (largestNode.left) {
-        let currentNode = largestNode.left;
-        while(currentNode.right) {
-            currentNode = currentNode.right;
-        }
-        let secondLargestNode = currentNode;
-        if(secondLargestNode.left) {
-            let currentNode = secondLargestNode.left;
-            while(currentNode.right) {
-                currentNode = currentNode.right;
-            }
-            return currentNode;
-        } 
-        return secondLargestNode.parent;
-        
-    }
-    let secondLargestNode = largestNode.parent;
-    let thirdLargest = secondLargestNode.parent > secondLargestNode.left ? secondLargestNode.parent : secondLargestNode.left;
-    return thirdLargest;
+  if (counter === 0) {
+    key = bst.key;
+    return key;
+  }
+
+  if (bst.left) {
+    thirdLargestNodeRecursion(bst.left);
+  }
+
+  
 }
 
+// function thirdLargestNode(bst) {
+//     if (bst.key === null) {
+//         throw new Error('bst is empty');
+//     } 
+//     if (!bst.left && !bst.right) {
+//         throw new Error('bst is a leaf');
+//     }
+//     if (bst.left && !bst.right || !bst.left && bst.right) {
+//         if (!bst.left.left && !bst.left.right || !bst.right.left && !bst.right.right) {
+//             throw new Error('bst only contains 2 nodes');
+//         }
+//     }
+//     let currentNode = bst;
+//     while(currentNode.right) {
+//         // at end of while loop let currentNode = currentNode.right
+//         currentNode = currentNode.right;
+//     }
+//     let largestNode = currentNode;
 
 
 
+//     // if the largest Node has a left child
+//     if (largestNode.left) {
+//         let currentNode = largestNode.left;
+//         let secondLargestNode;
 
+//         if (currentNode.right) { // if the largest node left child has a right branch
+//           while(currentNode.right) {
+//               currentNode = currentNode.right;
+//           }
+//           secondLargestNode = currentNode; // find the second largest node
+//         } else {
+//           secondLargestNode = currentNode; // else, it is the left child
+//         }
 
+//         if(secondLargestNode.left)  // if the second largest node has a left child
+//             let currentNode = secondLargestNode.left;
+//             let thirdLargestNode; 
 
-
-
-
-
-
-
-
-
+//             if (currentNode.right) { // if the largest node left child has a right branch
+//               while(currentNode.right) {
+//                   currentNode = currentNode.right;
+//               }
+//               thirdLargest = currentNode; // find the second largest node
+//             } else {
+//               thirdLargest = currentNode; // else, it is the left child
+//             }
+            
+//             return thirdLargest;
+//         } 
+//         // if the largest Node does not have a left child
+        
+    
+//     let secondLargestNode = largestNode.parent;
+//     let thirdLargest = secondLargestNode.parent > secondLargestNode.left ? secondLargestNode.parent : secondLargestNode.left;
+//     return thirdLargest;
+//   }
 
 function main() {
 const BST = new BinarySearchTree();
@@ -277,6 +309,8 @@ BST.insert(9);
 BST.insert(2);
 BST.insert(5);
 BST.insert(7);
+console.log(thirdLargestNodeRecursion(BST));
+console.log(key);
 // console.log(BST);
 // console.log(heightBST(BST));
 // console.log(isItBST(BST));
