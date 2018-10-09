@@ -201,20 +201,84 @@ function isItBST (BST) {
 // the second largest node is the left child of the most
 // the third largest node is the parent of the largest node
 
+// input:    5
+//          / \
+//        3    9
+//            / \
+//          6    11
+
+// output: 6
+
+
+
+function thirdLargestNode(bst) {
+    if (bst.key === null) {
+        throw new Error('bst is empty');
+    } 
+    if (!bst.left && !bst.right) {
+        throw new Error('bst is a leaf');
+    }
+    if (bst.left && !bst.right || !bst.left && bst.right) {
+        if (!bst.left.left && !bst.left.right || !bst.right.left && !bst.right.right) {
+            throw new Error('bst only contains 2 nodes');
+        }
+    }
+    let currentNode = bst;
+    while(currentNode.right) {
+        // at end of while loop let currentNode = currentNode.right
+        currentNode = currentNode.right;
+    }
+    let largestNode = currentNode;
+    if (largestNode.left) {
+        let currentNode = largestNode.left;
+        while(currentNode.right) {
+            currentNode = currentNode.right;
+        }
+        let secondLargestNode = currentNode;
+        if(secondLargestNode.left) {
+            let currentNode = secondLargestNode.left;
+            while(currentNode.right) {
+                currentNode = currentNode.right;
+            }
+            return currentNode;
+        } 
+        return secondLargestNode.parent;
+        
+    }
+    let secondLargestNode = largestNode.parent;
+    let thirdLargest = secondLargestNode.parent > secondLargestNode.left ? secondLargestNode.parent : secondLargestNode.left;
+    return thirdLargest;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function main() {
 const BST = new BinarySearchTree();
-BST.insert(10);
-BST.right = new BinarySearchTree(4, 2, BST);
-BST.left = new BinarySearchTree(1, 2, BST);
-// BST.insert(1);
-// BST.insert(4);
-// BST.insert(6);
-// BST.insert(9);
-// BST.insert(2);
-// BST.insert(5);
-// BST.insert(7);
+// BST.insert();
+// BST.right = new BinarySearchTree(4, 2, BST);
+// BST.left = new BinarySearchTree(1, 2, BST);
+BST.insert(1);
+BST.insert(4);
+BST.insert(6);
+BST.insert(9);
+BST.insert(2);
+BST.insert(5);
+BST.insert(7);
 // console.log(BST);
-console.log(heightBST(BST));
-console.log(isItBST(BST));
+// console.log(heightBST(BST));
+// console.log(isItBST(BST));
 }
 main();
