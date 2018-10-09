@@ -111,12 +111,6 @@ remove(key) {
   }
 }
 
-// 3
-// 2
-// 1
-// 3.replaceWith(2)
-
-
 _replaceWith(node) { // this is what we're replacing
   if (this.parent) { // if the node is not a root node
       if (this == this.parent.left) { // if the one we're removing is the left child
@@ -177,17 +171,50 @@ function heightBST (BST) {
   }
 }
 
+
+function isItBST (BST) {
+  if (!BST.left && !BST.right) {
+    return true;
+  } else if (BST.left && !BST.right) {
+    if (BST.left.key > BST.key) {
+      return false;
+    }
+    return isItBST(BST.left);
+  } else if (BST.right && !BST.left) {
+    if (BST.right.key < BST.key) {
+      return false;
+    }
+    return isItBST(BST.right);
+  } else {
+    if (BST.left.key > BST.key || BST.right.key < BST.key) {
+      return false;
+    }
+    return isItBST(BST.right) && isItBST(BST.left);
+  }
+}
+
+// =the third largest node will be on the right side of the tree
+// go all the way right until there is no right child
+
+// the largest node is the one that is the most (right)
+
+// the second largest node is the left child of the most
+// the third largest node is the parent of the largest node
+
 function main() {
 const BST = new BinarySearchTree();
-BST.insert(3);
-BST.insert(1);
-BST.insert(4);
-BST.insert(6);
-BST.insert(9);
-BST.insert(2);
-BST.insert(5);
-BST.insert(7);
+BST.insert(10);
+BST.right = new BinarySearchTree(4, 2, BST);
+BST.left = new BinarySearchTree(1, 2, BST);
+// BST.insert(1);
+// BST.insert(4);
+// BST.insert(6);
+// BST.insert(9);
+// BST.insert(2);
+// BST.insert(5);
+// BST.insert(7);
 // console.log(BST);
 console.log(heightBST(BST));
+console.log(isItBST(BST));
 }
 main();
