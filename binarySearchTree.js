@@ -49,7 +49,7 @@ class BinarySearchTree {
 
 find(key) {
   //if the item is found at the root then return that value
-  if (this.key == key) {
+  if (this.key === key) {
       return this.value;
   }
   //if the item you are looking for is less than the root 
@@ -78,6 +78,7 @@ remove(key) {
   if (this.key == key) { // checking the parent of all the nodes
       if (this.left && this.right) { // once you find it, determine the children
           const successor = this.right._findMin(); // find the left most value in the right branch
+          // can we do this.left._findMax(); ? and be equally ok
           this.key = successor.key;
           this.value = successor.value;
           successor.remove(successor.key);
@@ -110,27 +111,33 @@ remove(key) {
   }
 }
 
-_replaceWith(node) {
-  if (this.parent) { // if the node is not a leaf node
-      if (this == this.parent.left) { // if it's the left child
-          this.parent.left = node; // change the left child to the new value
-      }
-      else if (this == this.parent.right) { // if it's the right child
-          this.parent.right = node; // change the right child to the new value
+// 3
+// 2
+// 1
+// 3.replaceWith(2)
+
+
+_replaceWith(node) { // this is what we're replacing
+  if (this.parent) { // if the node is not a root node
+      if (this == this.parent.left) { // if the one we're removing is the left child
+          this.parent.left = node; // change the left child (the one we're removing) to the new value. connects the parent to the new child
+      } 
+      else if (this == this.parent.right) { // if the one we're removing the right child
+          this.parent.right = node; // change the right child (the one we're removing) to the new value
       }
 
-      if (node) {
-          node.parent = this.parent; // link up the new node with the old parent unless the node is null
+      if (node) {  
+          node.parent = this.parent; // link up the new node with the old parent unless the node is null. connects the child to the new parent
       }
   }
-  else { // node is a leaf node
-      if (node) { // replacing a leaf node is simple
+  else { // node is a root node
+      if (node) { // replacing a root node is simple
           this.key = node.key;
           this.value = node.value;
           this.left = node.left;
           this.right = node.right;
       }
-      else { // getting rid of a leaf node is sinple
+      else { // getting rid of a root node is sinmple
           this.key = null;
           this.value = null;
           this.left = null;
@@ -147,3 +154,40 @@ _findMin() {
 }
 
 }
+
+// 1
+
+//        2
+    // 1    3
+    //        2
+
+// leaf node that doesn't have any children
+// report a height everytime that happens
+// compare heights
+
+function heightBST (BST) {
+  if (!BST.left && !BST.right) {
+    return 0;
+  } else if (BST.left && !BST.right) {
+    return 1 + heightBST(BST.left);
+  } else if (BST.right && !BST.left) {
+    return 1 + heightBST(BST.right);
+  } else {
+    return 1 + Math.max(heightBST(BST.right), heightBST(BST.left));
+  }
+}
+
+function main() {
+const BST = new BinarySearchTree();
+BST.insert(3);
+BST.insert(1);
+BST.insert(4);
+BST.insert(6);
+BST.insert(9);
+BST.insert(2);
+BST.insert(5);
+BST.insert(7);
+// console.log(BST);
+console.log(heightBST(BST));
+}
+main();
