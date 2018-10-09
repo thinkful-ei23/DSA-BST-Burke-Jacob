@@ -212,32 +212,38 @@ function isItBST (BST) {
 // need to find the max of right most branch
 // if we find the max
 // the right most branch on the left of that is the second largest
-let counter = 3;
-let key = null;
+// let counter = 3;
+// let key = null;
 // 3
 // 1   4
 
-function thirdLargestNodeRecursion(bst) {
-
-  if (bst.right) {
-    thirdLargestNodeRecursion(bst.right);
-    if (key) {
-      return key;
+function findLargestNode(bst, num) {
+    let counter = num;
+    let key = null;
+    function thirdLargestNodeRecursion(bst) {
+        if (bst.right) {
+          thirdLargestNodeRecursion(bst.right);
+          if (key) {
+            return key;
+          }
+        }
+        counter--;
+        if (counter === 0) {
+          key = bst.key;
+          return key;
+        }
+        if (bst.left) {
+          thirdLargestNodeRecursion(bst.left);
+        }
     }
-  }
-  counter--;
-
-  if (counter === 0) {
-    key = bst.key;
-    return key;
-  }
-
-  if (bst.left) {
-    thirdLargestNodeRecursion(bst.left);
-  }
-
-  
+    return thirdLargestNodeRecursion(bst);
 }
+
+
+
+
+
+
 
 // function thirdLargestNode(bst) {
 //     if (bst.key === null) {
@@ -309,8 +315,8 @@ BST.insert(9);
 BST.insert(2);
 BST.insert(5);
 BST.insert(7);
-console.log(thirdLargestNodeRecursion(BST));
-console.log(key);
+console.log(findLargestNode(BST, 1));
+// console.log(key);
 // console.log(BST);
 // console.log(heightBST(BST));
 // console.log(isItBST(BST));
