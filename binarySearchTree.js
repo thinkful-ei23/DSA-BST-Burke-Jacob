@@ -149,16 +149,6 @@ _findMin() {
 
 }
 
-// 1
-
-//        2
-    // 1    3
-    //        2
-
-// leaf node that doesn't have any children
-// report a height everytime that happens
-// compare heights
-
 function heightBST (BST) {
   if (!BST.left && !BST.right) {
     return 0;
@@ -193,45 +183,66 @@ function isItBST (BST) {
   }
 }
 
+function isItBalanced (BST) {
+  if (!BST.key) { // if it's empty
+  throw new Error('Nothing in the BST');
+  }
+  if (!BST.left && !BST.right) { // 
+    return true;
+  }
+  const maxHeight = heightBST(BST);
+  let minHeight = 0;
 
-
-
-function nThLargestNodeRecursion(bst) {
-
-  if (bst.right) { // go right
-    nThLargestNodeRecursion(bst.right); // keep going right until the end
-    if (key) {
-      return key;
+  function determineMinHeight(BST) {
+    if (!BST.left && !BST.right) {
+      return minHeight; 
+    } else if (!(BST.right && BST.left)) {
+      return minHeight;
+    } else {
+      minHeight++;
+      determineMinHeight(BST.right);
+      determineMinHeight(BST.left);
     }
   }
-  n--; // we decrement
-
-  if (n === 0) {
-    key = bst.key;
-    return key;
-  }
-
-  if (bst.left) { // the largest on the right might have a left side
-    nThLargestNodeRecursion(bst.left);
-  }
-
+  determineMinHeight(BST);
+  return maxHeight - minHeight < 2;
 }
 
+
+function findLargestNode(bst, num) {
+    let counter = num;
+    let key = null;
+    function thirdLargestNodeRecursion(bst) {
+        if (bst.right) {
+          thirdLargestNodeRecursion(bst.right);
+          if (key) {
+            return key;
+          }
+        }
+        counter--;
+        if (counter === 0) {
+          key = bst.key;
+          return key;
+        }
+        if (bst.left) {
+          thirdLargestNodeRecursion(bst.left);
+        }
+    }
+    return thirdLargestNodeRecursion(bst);
+}
 
 
 function main() {
 const BST = new BinarySearchTree();
-// BST.insert();
-// BST.right = new BinarySearchTree(4, 2, BST);
-// BST.left = new BinarySearchTree(1, 2, BST);
-BST.insert(1);
-BST.insert(4);
-BST.insert(6);
-BST.insert(9);
-BST.insert(2);
 BST.insert(5);
-BST.insert(7);
-console.log(nThLargestNodeRecursion(BST, 3));
+BST.insert(1);
+BST.insert(2);
+
+
+
+console.log(findLargestNode(BST, 3));
+console.log(isItBalanced(BST));
+// console.log(key);
 // console.log(BST);
 // console.log(heightBST(BST));
 // console.log(isItBST(BST));
